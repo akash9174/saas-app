@@ -1,13 +1,21 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import Sidebar from '../../components/Sidebar';
 
 export default function PagesLayout({ children }) {
-  return (
+  const pathname = usePathname();
+  const layoutRoutes = ['/dashboard', '/product', '/payments', '/store', '/setting']; // Define where layout applies
+
+  const shouldApplyLayout = layoutRoutes.some(route => pathname.startsWith(route));
+
+  return shouldApplyLayout ? (
     <div style={wrapperStyle}>
       <Sidebar />
-      <div style={contentWrapperStyle}>
-        {children}
-      </div>
+      <div style={contentWrapperStyle}>{children}</div>
     </div>
+  ) : (
+    <>{children}</> // No layout, just raw page content
   );
 }
 

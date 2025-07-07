@@ -1,0 +1,115 @@
+.section {
+  margin-bottom: 30px;
+}
+
+.upload-box {
+  border: 2px dashed #ccc;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.upload-link {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.upload-subtext {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.video-url-row {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.video-url-row input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.video-url-row button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.pricing-toggle {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.pricing-option {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.pricing-option.active {
+  border: 2px solid #0a66ff;
+  background-color: #eaf1ff;
+}
+
+.pricing-option span {
+  font-weight: 600;
+}
+
+.pricing-option small {
+  display: block;
+  color: #666;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.price-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  max-width: 200px;
+}
+
+.price-input span {
+  margin-right: 8px;
+}
+
+.price-input input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.discount-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.info-icon {
+  background: #eee;
+  border-radius: 50%;
+  padding: 0 6px;
+  font-size: 12px;
+}

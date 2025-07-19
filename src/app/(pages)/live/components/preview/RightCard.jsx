@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import PhoneInputWithVerify from './PhoneInputWithVerify';
 import 'react-phone-input-2/lib/style.css';
 import './RightCard.css';
-
+import { useSelector } from 'react-redux';
 const RightCard = () => {
+    const {cta}=useSelector((state)=>state.form.formData)
     const [email, setEmail] = useState('');
 
     return (
@@ -39,7 +40,7 @@ const RightCard = () => {
             </div>
 
 
-            <button className="get-now-button">Get it now</button>
+            <button className="get-now-button">{cta || "Get it now"}</button>
 
             {/* <p className="terms-text">
         By continuing, you agree to Coding Hubhhh’s <a href="#">Terms</a> and <a href="#">Refund policy</a>.

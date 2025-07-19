@@ -6,8 +6,7 @@
 
 
 .lp-wrapper {
-  background: linear-gradient(to bottom, #111827, #1f2937, #374151);
-  min-height: 100vh;
+  /* min-height: 87vh; */
   padding: 4rem 5rem;
   font-family: 'Inter', sans-serif;
 }
@@ -44,6 +43,17 @@
 background-color: white;
 }
 
+.preview-left {
+  flex: 1 1 66%;
+  max-width: 740px;
+}
+
+.preview-right {
+  flex: 1 1 30%;
+  max-width: 360px;
+}
+
+
 .web-container::-webkit-scrollbar-button {
   display: none;
 }
@@ -62,43 +72,8 @@ background-color: white;
   margin-bottom: 0.7rem;
 }
 
-.preview-left {
-  flex: 1 1 66%;
-  max-width: 740px;
-}
-
-.preview-right {
-  flex: 1 1 30%;
-  max-width: 360px;
-}
-
-/* -----hero image start---- */
 
 
-.hero-section {
-
-  border-radius: 14px;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: center;
-
-}
-
-.hero-image {
-  aspect-ratio: 16 / 9;
-
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
-
-
-
-
-
-/* -----hero image end---- */
 
 .preview-title {
   font-size: 1.4rem;
@@ -219,21 +194,39 @@ background-color: white;
   object-fit: contain;
 }
 
-.image-container {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  position: relative;
-}
+/* -----hero image start---- */
 
+
+.hero-section {
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
 .hero-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-    border-radius: 12px;
-
-  /* or use 'contain' if you want full image with padding */
+  border-radius: inherit;
 }
+
+
+/* .image-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  position: relative;
+} */
+
+.image-container {
+  width: 400px; /* fixed width */
+  height: 225px; /* fixed height, 16:9 aspect ratio */
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
 
 .video-container {
   width: 100%;
@@ -250,6 +243,8 @@ background-color: white;
   object-fit: cover; /* Optional: use 'contain' if you prefer */
   border-radius: 12px;
 }
+
+/* -----hero image end---- */
 /* ------------------------------video loading skeleton start----------------------------- */
 .skeleton-box {
   width: 100%;
@@ -298,7 +293,8 @@ background-color: white;
   color: rgba(255, 255, 255, 0.1);
 }
 
-/* ------------------------------video loading skeleton start----------------------------- */
+/* ------------------------------video loading skeleton end----------------------------- */
+
 
 
 .title {
@@ -340,6 +336,8 @@ background-color: white;
   padding: 5px 10px;
   border-radius: 5px;
 }
+
+
 
 
 

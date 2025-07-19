@@ -1,9 +1,18 @@
 'use client';
-import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+import BottomButton from './components/BottomButton';
 import HeroImageUpload from './components/HeroImageUpload';
 import FAQModal from './modals/FAQModal';
 import TestimonialModal from './modals/TestimonialModal';
+import './PaymentDetailsForm.css';
+import '../preview/my-tailwind.css'
+import { useSelector,useDispatch } from 'react-redux';
+import { updateFormField , addTestimonial,  editTestimonial} from '@/app/redux/features/formSlice';
+import { selectFaqs } from '../../../../redux/features/formSlice';
+import { selectTestimonials } from '../../../../redux/features/formSlice';
+
+
 
 const PlaygroundApp = dynamic(() => import('../../../../../package/App'), {
   ssr: false,
@@ -11,51 +20,75 @@ const PlaygroundApp = dynamic(() => import('../../../../../package/App'), {
 });
 
 import '../../../../../package/index.css';
+import { flipDirection } from 'lexical';
 
-export default function PageDetailsForm({ formData, onChange, setFormData }) {
+export default function PageDetailsForm() {
+  const dispatch= useDispatch()
+  const {title, cta}=useSelector((state)=> state.form.formData)
+  
+  console.log("reducer state:", useSelector((state) => state.form.formData));
+
+    
+
   const [showFAQ, setShowFAQ] = useState(false);
   const [showTestimonial, setShowTestimonial] = useState(false);
-  const [faqs, setFaqs] = useState([]);
-  const [testimonials, setTestimonials] = useState([]);
+ 
   const [ openMenuIndex, setOpenMenuIndex] = useState({ type: null, index: null });
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [editingFAQ, setEditingFAQ] = useState(null);
 
-  useEffect(() => {
-    if (formData?.faqs) setFaqs(formData.faqs);
-    if (formData?.testimonials) setTestimonials(formData.testimonials);
-  }, [formData]);
 
-  const handleAddFAQ = (faq) => {
-    if (!faqs.find((f) => f.question === faq.question)) {
-      const updatedFaqs = [...faqs, faq];
-      setFaqs(updatedFaqs);
-      setFormData({ ...formData, faqs: updatedFaqs });
+  // const testimonials = useSelector((state) => state.form.formData.testimonials || []);
+  const testimonials = useSelector(selectTestimonials);
+
+// const faqs = useSelector((state) => state.form.formData.faqs || []);
+const faqs = useSelector(selectFaqs);
+console.log("faq: ",faqs)
+
+   const handleChange=(e)=>{
+    dispatch(updateFormField({name: e.target.name, value: e.target.value}))
+   }
+
+
+
+
+
+   const handleAddFAQ = (faq) => {
+    const currentFaqs = useSelector((state) => state.form.formData.faqs || []);
+    if (!currentFaqs.find((f) => f.question === faq.question)) {
+      dispatch(addFaq(faq));
     }
+    setShowFAQ(false);
   };
+  
 
   const handleEditFAQ = (updatedFAQ) => {
     if (editingFAQ && typeof editingFAQ.index === 'number') {
-      const updated = [...faqs];
-      updated[editingFAQ.index] = updatedFAQ;
-      setFaqs(updated);
-      setFormData({ ...formData, faqs: updated });
+      dispatch(editFaq({ index: editingFAQ.index, updatedFAQ }));
     }
     setShowFAQ(false);
     setEditingFAQ(null);
   };
+  
 
 
   const handleAddTestimonial = (testimonial) => {
-    if (!testimonials.find((t) => t.name === testimonial.name && t.comment === testimonial.comment)) {
-      const updatedTestimonials = [...testimonials, testimonial];
-      setTestimonials(updatedTestimonials);
-      setFormData({ ...formData, testimonials: updatedTestimonials });
+    const current = useSelector((state) => state.form.formData.testimonials || []);
+    const exists = current.find((t) => t.name === testimonial.name && t.comment === testimonial.comment);
+    if (!exists) {
+      dispatch(addTestimonial(testimonial));
     }
-
-    // Close the modal after adding
     setShowTestimonial(false);
   };
+  
+  const handleEditTestimonial = (updated) => {
+    if (editingTestimonial && typeof editingTestimonial.index === 'number') {
+      dispatch(editTestimonial({ index: editingTestimonial.index, updated }));
+    }
+    setShowTestimonial(false);
+    setEditingTestimonial(null);
+  };
+  
 
 
   const styles = {
@@ -112,20 +145,20 @@ export default function PageDetailsForm({ formData, onChange, setFormData }) {
 
   return (
     <>
-    <div className=''>
+    <div className='' style={{backgroundColor:"lightblueas"}}>
 
    
-      <label htmlFor="title" style={styles.label}>Payment Page Title</label>
+      <label htmlFor="title" style={styles.label}>Payment Page Title <span style={{ color: 'red' }}>*</span></label>
       <input
         id="title"
         type="text"
         name="title"
-        value={formData?.title || ''}
-        onChange={onChange}
+        value={title || ''}
+        onChange={handleChange}
         style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
       />
 
-      <HeroImageUpload formData={formData} setFormData={setFormData} />
+      <HeroImageUpload  />
 
       <label htmlFor="description" style={styles.label}>Description</label>
       <div id="description" style={{ marginBottom: '1rem' }}>
@@ -137,8 +170,8 @@ export default function PageDetailsForm({ formData, onChange, setFormData }) {
         id="cta"
         type="text"
         name="cta"
-        value={formData?.cta || ''}
-        onChange={onChange}
+        value={cta || ''}
+        onChange={handleChange}
         style={{ width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
       />
 
@@ -513,6 +546,7 @@ export default function PageDetailsForm({ formData, onChange, setFormData }) {
         ❓ FAQ
       </button>
 
+
       {/* Modals */}
       {showTestimonial && (
         <TestimonialModal
@@ -525,8 +559,7 @@ export default function PageDetailsForm({ formData, onChange, setFormData }) {
             if (editingTestimonial && typeof editingTestimonial.index === 'number') {
               const updatedTestimonials = [...testimonials];
               updatedTestimonials[editingTestimonial.index] = updated;
-              setTestimonials(updatedTestimonials);
-              setFormData({ ...formData, testimonials: updatedTestimonials });
+           
             }
             setShowTestimonial(false);
             setEditingTestimonial(null);

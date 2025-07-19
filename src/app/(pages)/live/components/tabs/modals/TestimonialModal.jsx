@@ -1,16 +1,19 @@
+'use client';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTestimonial, editTestimonial } from '@/app/redux/features/formSlice';
 import ModalWrapper from './ModalWrapper';
+import { selectTestimonials } from '@/app/redux/features/formSlice';
 
-export default function TestimonialModal({
-  onClose,
-  onAddTestimonial,
-  onEditTestimonial,
-  testimonialToEdit,
-}) {
+export default function TestimonialModal({ onClose, testimonialToEdit }) {
+  const dispatch = useDispatch();
   const [photo, setPhoto] = useState('');
   const [name, setName] = useState('');
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
+
+  // const testimonials = useSelector((state) => state.form.formData.testimonials || []);
+  const testimonials = useSelector(selectTestimonials);
 
   useEffect(() => {
     if (testimonialToEdit) {
@@ -30,20 +33,26 @@ export default function TestimonialModal({
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhoto(reader.result);
-      };
+      reader.onloadend = () => setPhoto(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = () => {
     const data = { name, comment, photo, rating };
-    if (testimonialToEdit) {
-      onEditTestimonial(data);
+
+    if (testimonialToEdit && typeof testimonialToEdit.index === 'number') {
+      dispatch(editTestimonial({ index: testimonialToEdit.index, updated: data }));
     } else {
-      onAddTestimonial(data);
+      const exists = testimonials.find(
+        (t) => t.name === data.name && t.comment === data.comment
+      );
+      if (!exists) {
+        dispatch(addTestimonial(data));
+      }
     }
+
+    onClose(); // close modal after submit
   };
 
   return (

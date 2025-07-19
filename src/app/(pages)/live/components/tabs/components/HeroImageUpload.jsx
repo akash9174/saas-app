@@ -1,22 +1,32 @@
 'use client';
 import React, { useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateFormFields } from '@/app/redux/features/formSlice'; // adjust import
 import './HeroImageUpload.css';
-import {isValidVideoUrl} from '../../../../../../lib/commanFun'
+import { isValidVideoUrl } from '../../../../../../lib/commanFun';
+import { FaRegFolderOpen, FaRegImage, FaTrashAlt } from 'react-icons/fa';
 
-export default function HeroImageUpload({ formData, setFormData }) {
+export default function HeroImageUpload() {
+  const dispatch = useDispatch();
   const fileInputRef = useRef();
   const [isDragging, setIsDragging] = useState(false);
   const [videoInput, setVideoInput] = useState('');
 
+  const {
+    imageFile,
+    videoUrl,
+    heroFileName,
+    heroFileSize
+  } = useSelector((state) => state.form.formData);
+
   const handleFileUpload = (file) => {
     const fileUrl = URL.createObjectURL(file);
 
-    setFormData((prev) => ({
-      ...prev,
+    dispatch(updateFormFields({
       imageFile: fileUrl,
-      videoUrl: '', // Clear any existing video URL
+      videoUrl: '',
       heroFileName: file.name,
-      heroFileSize: (file.size / 1024).toFixed(2),
+      heroFileSize: (file.size / 1024).toFixed(2)
     }));
   };
 
@@ -43,55 +53,60 @@ export default function HeroImageUpload({ formData, setFormData }) {
     setIsDragging(false);
   };
 
-
-
-
-
   const handleSetVideoUrl = () => {
     if (!isValidVideoUrl(videoInput)) {
       alert('Please enter a valid video URL.');
       return;
     }
 
-    setFormData((prev) => ({
-      ...prev,
+    dispatch(updateFormFields({
       videoUrl: videoInput,
-      imageFile: '', // Clear image if video is being set
+      imageFile: '',
       heroFileName: '',
-      heroFileSize: '',
+      heroFileSize: ''
     }));
   };
 
   const handleRemove = () => {
-    setFormData((prev) => ({
-      ...prev,
+    dispatch(updateFormFields({
       imageFile: '',
       videoUrl: '',
       heroFileName: '',
-      heroFileSize: '',
+      heroFileSize: ''
     }));
     setVideoInput('');
   };
 
-  const hasMedia = formData.imageFile || formData.videoUrl;
+  const hasMedia = imageFile || videoUrl;
 
-  return (
-    <div className="hero-upload-box">
-      <label className="required-label">Cover Image/Video *</label>
+return (
+  <div className="hero-upload-box">
+    <label className="required-label" style={{  fontSize: '0.9rem',
+      fontWeight: '600',
+      color: '#333',
+      marginBottom: '0.4rem',
+      display: 'block',}}>
+      Cover Image/Video <span style={{ color: 'red' }}>*</span>
+    </label>
 
+    <div className="media-upload-wrapper">
       {hasMedia ? (
         <div className="file-preview-box">
-          <div className="file-preview-icon">🖼️</div>
+          <div className="file-preview-icon">
+            <FaRegImage size={24} />
+          </div>
           <div className="file-details">
-            <div className="file-name">{formData.heroFileName || 'From URL'}</div>
+            <div className="file-name">{heroFileName || 'From URL'}</div>
             <div className="file-size">
-              {formData.heroFileSize ? `${formData.heroFileSize} KB` : 'External URL'}
+              {heroFileSize ? `${heroFileSize} KB` : 'External URL'}
             </div>
           </div>
-          <button className="file-remove-btn" onClick={handleRemove}>🗑️</button>
+          <button className="file-remove-btn" onClick={handleRemove}>
+            <FaTrashAlt size={18} />
+          </button>
         </div>
       ) : (
-        <>
+        <div className="upload-section-box">
           <div
             className={`upload-container ${isDragging ? 'dragging' : ''}`}
             onClick={() => fileInputRef.current.click()}
@@ -106,29 +121,41 @@ export default function HeroImageUpload({ formData, setFormData }) {
               ref={fileInputRef}
               onChange={handleFileChange}
             />
+
             <div className="upload-box">
-              <div className="upload-icon">📁</div>
-              <p><span className="upload-text">Upload</span> or drag & drop</p>
-              <p className="upload-subtext">1280 x 720 (16:9) recommended; Up to 10 MB each</p>
+              <div className="upload-icon">
+                <FaRegFolderOpen size={32} color="#4a90e2" />
+              </div>
+              <p>
+                <span className="upload-text">Upload</span> or drag & drop
+              </p>
+              <p className="upload-subtext">
+                1280 x 720 (16:9) recommended; Up to 10 MB each
+              </p>
             </div>
           </div>
 
-          <div className="or-divider">OR</div>
+          <div className="or-divider">
+            <hr className="divider-line" />
+            <span className="divider-text">OR</span>
+            <hr className="divider-line" />
+          </div>
 
-         <div className="video-url-input">
-  <input
-    type="text"
-    placeholder="Enter video URL"
-    value={videoInput}
-    onChange={(e) => setVideoInput(e.target.value)}
-  />
-  <button onClick={handleSetVideoUrl} className="video-url-submit-btn">
-    Add
-  </button>
-</div>
-
-        </>
+          <div className="video-url-input">
+            <input
+              type="text"
+              placeholder="Enter video URL"
+              value={videoInput}
+              onChange={(e) => setVideoInput(e.target.value)}
+            />
+            <button onClick={handleSetVideoUrl} className="video-url-submit-btn">
+              Add
+            </button>
+          </div>
+        </div>
       )}
     </div>
-  );
+  </div>
+);
+
 }

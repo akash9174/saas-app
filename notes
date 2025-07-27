@@ -22,3 +22,19 @@ rte content generate chatgpt prompt-----------------------
 
 i have integrated richtext editor in my code, now i want to check weather a good copy paste can be happenend inside it, so for that you have to give me  a verity of rich text editor content, so i can copy paste it to see wherther it keeps the format not ok, bro just give me all at once so i can copy paste it directly, why are you giving it one by one
 
+
+
+
+  
+---TODAY'S CHANGES-----------------------08-07-25
+
+changed components-----------
+LivePreview.css
+Live.css   --377
+src/app/(pages)/live/components/tabs/PageDetailsForm.jsx  --425
+
+
+new created compoent--1008
+src/app/(pages)/live/components/tabs/components/BottomButton.jsx
+src/app/(pages)/live/components/tabs/PageDetailsForm.css  --- 1055
+ 

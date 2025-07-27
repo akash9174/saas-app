@@ -1,9 +1,17 @@
+'use client';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFaq, editFaq } from '@/app/redux/features/formSlice';
 import ModalWrapper from './ModalWrapper';
+import { selectFaqs } from '@/app/redux/features/formSlice';
 
-export default function FAQModal({ onClose, onAddFAQ, onEditFAQ, faqToEdit }) {
+export default function FAQModal({ onClose, faqToEdit }) {
+  const dispatch = useDispatch();
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
+
+  // const faqs = useSelector((state) => state.form.formData.faqs || []);
+  const faqs = useSelector(selectFaqs);
 
   useEffect(() => {
     if (faqToEdit) {
@@ -17,12 +25,17 @@ export default function FAQModal({ onClose, onAddFAQ, onEditFAQ, faqToEdit }) {
 
   const handleSubmit = () => {
     const faqData = { question, answer };
-    if (faqToEdit && onEditFAQ) {
-      onEditFAQ(faqData);
+
+    if (faqToEdit && typeof faqToEdit.index === 'number') {
+      dispatch(editFaq({ index: faqToEdit.index, updatedFAQ: faqData }));
     } else {
-      onAddFAQ(faqData);
+      const exists = faqs.find((f) => f.question === question);
+      if (!exists) {
+        dispatch(addFaq(faqData));
+      }
     }
-    onClose(); // Close the modal after action
+
+    onClose(); // close modal
   };
 
   return (

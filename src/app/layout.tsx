@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ClientWrapper from '../lib/ClientWrapper';
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +15,10 @@ export default function RootLayout({
     <html lang="en">
       <body
       >
-        {children}
+        <ClientWrapper>
+          {children}
+        </ClientWrapper>
+
       </body>
     </html>
   );

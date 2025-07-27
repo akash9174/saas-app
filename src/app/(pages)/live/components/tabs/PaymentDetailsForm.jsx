@@ -28,39 +28,61 @@ export default function PaymentDetailsForm() {
       </div>
 
       <div className="section">
-        <h3>Pricing</h3>
-        <div className="pricing-toggle">
-          <div
-            className={`pricing-option ${pricingType === 'fixed' ? 'active' : ''}`}
-            onClick={() => setPricingType('fixed')}
-          >
-            <span>Fixed Price</span>
-            <small>Charge a one-time fixed pay</small>
-          </div>
-          <div
-            className={`pricing-option ${pricingType === 'flexible' ? 'active' : ''}`}
-            onClick={() => setPricingType('flexible')}
-          >
-            <span>Customers decide price</span>
-            <small>Let customers pay any price</small>
-          </div>
-        </div>
+            <label htmlFor="price" style={{ display: 'block', marginBottom: '6px', fontWeight: '500' }}>
+              Price <span style={{ color: 'red' }}>*</span>
+            </label>
 
-        {pricingType === 'fixed' && (
-          <>
-            <label>Price *</label>
-            <div className="price-input">
-              <span>₹</span>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+              width: '96%',
+              marginBottom: '12px',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              padding: '8px 10px',
+              backgroundColor: '#fff'
+            }}>
+              <span style={{ fontSize: '16px' }}>₹</span>
               <input
                 type="number"
                 name="price"
+                id="price"
                 placeholder="Enter amount"
                 value={formData.price}
                 onChange={handleChange}
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  width: '100%',
+                  fontSize: '14px',
+                }}
               />
             </div>
-          </>
-        )}
+
+            {/* Discount checkbox */}
+            <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <input
+                type="checkbox"
+                name="offerDiscount"
+                checked={formData.offerDiscount}
+                onChange={handleChange}
+              />
+              Offer discounted price
+              <span
+                title="Enable this to set a lower price for promotional purposes"
+                style={{
+                  backgroundColor: '#007bff',
+                  color: '#fff',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  padding: '2px 6px',
+                  cursor: 'pointer',
+                }}
+              >
+                i
+              </span>
+            </label>
       </div>
     </>
   );

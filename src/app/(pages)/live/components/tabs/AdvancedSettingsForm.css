@@ -1,8 +1,10 @@
 
-
 .section {
   margin-bottom: 32px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 24px;
 }
+
 
 .themes {
   display: flex;
@@ -160,4 +162,18 @@ input[type="text"] {
   border: 1px solid #ccc;
   width: 100%;
   box-sizing: border-box;
+}
+
+.pricing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Top-align for multiline descriptions */
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.pricing-row p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #555;
 }
